@@ -10,11 +10,9 @@ function [res, error] = minSpanTree(vals)
         end
     end
     
-    disconnected = all(adjMat == 0, 2);
-        
     g = graph(adjMat);
     
     res = minspantree(g);
-    error = any(disconnected);
+    error = any(conncomp(g) ~= 1);
 end
 
