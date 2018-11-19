@@ -23,15 +23,14 @@ n2 = [
     1 8
 ];
 
-steiner = inicializaSteiner(n1);
+% Create fuctions and init population
+steiner = inicializaSteiner(n2);
+[obj, print] = makeFuns(n2, steiner);
 
 n = size(steiner,1); % Chomosome size
 pm = 0.1;            % Mutation p
 N = 50;              % Pop size
 gens = 100;          % Generations
-
-% Create fuctions
-[obj, print] = makeFuns(n1, steiner);
 
 pop = population('i', n, (n - 1) * pm);
 pop = min(pop);
