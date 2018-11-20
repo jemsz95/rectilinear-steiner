@@ -29,21 +29,33 @@ steiner = inicializaSteiner(n2);
 
 n = size(steiner,1); % Chomosome size
 pm = 0.1;            % Mutation p
-N = 50;              % Pop size
-gens = 100;          % Generations
+N = 70;              % Pop size
+gens = 30;          % Generations
+
+evals = 20; % Evaluate the algorithm n times
+best = zeros(evals,gens); % best found
 
 pop = population('i', n, (n - 1) * pm);
 pop = min(pop);
-pop = random(pop, N);
-pop = evaluate(pop, obj);
 
-for i = 1:gens
-    pop = tournament(pop);
-    pop = crossover(pop);
-    pop = mutation(pop);
+for e = 1:evals
+    pop = random(pop, N);
     pop = evaluate(pop, obj);
-    best = get(pop, 'best');
-    disp(best.fitness);
+
+    for g = 1:gens
+        pop = tournament(pop);
+        pop = crossover(pop);
+        pop = mutation(pop);
+        pop = evaluate(pop, obj);
+        best_gen = get(pop, 'best');
+        best(e,g) = best_gen.fitness;
+    end
 end
 
-print(best.r)
+best_avg = mean(best, 1);
+best_std = std(best, 0, 1);
+
+plot(1:gens, best_avg);
+hold on;
+plot(1:gens, best_avg + best_std);
+plot(1:gens, best_avg - best_std);
